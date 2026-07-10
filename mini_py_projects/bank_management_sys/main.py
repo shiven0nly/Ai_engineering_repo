@@ -45,7 +45,7 @@ class BankSystem:
                 print("Invalid password.")
                 user_choice = input("Forget password? Enter YES or NO: ").strip().lower()
                 if user_choice == "yes":
-                    self.forgetPassword()
+                    self.forget_password()
                     return True
                 else:
                     print("Ok, try again!")
@@ -59,7 +59,7 @@ class BankSystem:
         return False
 
 # update Password
-    def updatePassword(self):
+    def update_password(self):
         curr_pass = input("Enter your current password: ")
         if(curr_pass == self.password):
             new_pass = input("Enter your new password: ")
@@ -82,7 +82,7 @@ class BankSystem:
             return False
     
     # update pin
-    def updatePin(self):
+    def update_pin(self):
         try:
             curr_pin = int(input("Enter your current pin: "))
         except ValueError:
@@ -117,7 +117,7 @@ class BankSystem:
             return False
         
     # forget password function
-    def forgetPassword(self):
+    def forget_password(self):
         new_pass = input("Enter your new password: ")
         cnf_pass = input("Confirm your password: ")
         if(new_pass == cnf_pass):
@@ -131,7 +131,7 @@ class BankSystem:
                 return False
 
     # Account Information
-    def accountInfo(self):
+    def account_info(self):
         print("\n===Your Account Information===")
         print(f"""
         Your name: {self.name},
@@ -233,7 +233,7 @@ class BankAccount(BankSystem):
             print("=====================")
             
             if(userInp == 0):
-                self.accountInfo()
+                self.account_info()
             
             elif(userInp == 1):
                 self.check_balance()
@@ -245,14 +245,13 @@ class BankAccount(BankSystem):
                 self.withdraw()
             
             elif(userInp == 4):
-                self.transferMoney()
+                self.transfer_money()
                 
             elif(userInp == 5):
-                self.updatePassword()
+                self.update_password()
                 
             elif(userInp == 6):
-                self.updatePin()
-            
+                self.update_pin()
             elif(userInp == 7):
                 print("Thank you for using!!")
                 return login_func()
@@ -263,7 +262,7 @@ class BankAccount(BankSystem):
                 print("Invalid input!!")
         
     # Transfer Money
-    def transferMoney(self):
+    def transfer_money(self):
         print(f"Account no. from money is transferred from: {self.account_number}")
         try:
             target_account_number = int(input("Enter recipient account number: "))
