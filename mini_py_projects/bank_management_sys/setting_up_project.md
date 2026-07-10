@@ -80,18 +80,18 @@ Bank Account = {
 ```
 
 ### Additional Features we can add:
-[] Transaction History
-[] Change Password
-[] Change PIN
-[] Multiple Users (using a dictionary)
-[] Transfer Money between accounts
-[] Interest Calculation
-[] Account Details
-[] Logout option
-[] Maximum 3 login attempts
-[] Input validation (try-except)
-[] Date and time of transactions
-[] Save data to a file (so balance persists after restarting)
+- [] Transaction History
+- [] Change Password
+- [] Change PIN
+- [] Multiple Users (using a dictionary)
+- [] Transfer Money between accounts
+- [] Interest Calculation
+- [] Account Details
+- [] Logout option
+- [] Maximum 3 login attempts
+- [] Input validation (try-except)
+- [] Date and time of transactions
+- [] Save data to a file (so balance persists after restarting)
 
 
 ---
