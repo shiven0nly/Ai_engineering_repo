@@ -83,8 +83,8 @@ Bank Account = {
 
 ## THE TWO SYSTEMS
 **Here, I made the bank management system in two parts:-
-1. BankSystem:- That handles user login and updation like: update password, update pin, forget password
-2. BankAccount:- That handles transactions like: deposit , withdraw and money transfer
+1. **BankSystem:-** That handles user login and updation like: update password, update pin, forget password
+2. **BankAccount:-** That handles transactions like: deposit , withdraw and money transfer
 
 * This makes the system more clean and easy to scale for future requirements.
 * I used Inheritance property to take the BankSystem Credentials to use in BankAccount
