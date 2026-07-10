@@ -1,3 +1,7 @@
+from datetime import datetime
+
+
+# class BankAccount 
 class BankAccount:
     # storing user information
     def __init__(self):
@@ -5,6 +9,7 @@ class BankAccount:
         self.password="admin123"
         self.pin=1234
         self.balance=1000
+        self.history=[]
     
     # login
     def login(self):
@@ -19,6 +24,9 @@ class BankAccount:
             print("=============")
             print("Login Successful")
             print("=============")
+            current_time = datetime.now()
+            formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+            print(f"Login: {formatted_time}")
             return True
         else:
             print("Inavalid Account number or Password")
@@ -27,6 +35,7 @@ class BankAccount:
     # Check Balance
     def check_balance(self):
         print(f"Current balance:{self.balance}")
+        print(self.history)
         
         
     # Deposit
@@ -40,6 +49,9 @@ class BankAccount:
             self.balance += depositAmt
             print("Transaction Succesful!!")
             print(f"Available balance: {self.balance}")
+            current_time = datetime.now()
+            formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+            self.history.append(f"Deposited: +{depositAmt} : {formatted_time}")
             
         else:
             print("Enter valid amount!!")
@@ -70,6 +82,9 @@ class BankAccount:
                 self.balance -= withdrawAmt
                 print("Transaction Successful!!")
                 print(f"Available balance: {self.balance}")
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+                self.history.append(f"Withdraw: -{withdrawAmt} : {formatted_time}")
                 
             else:
                 print("Invalid pin")
