@@ -105,6 +105,13 @@ Bank Account = {
 - [done] Date and time of transactions
 - [] Save data to a file (so balance persists after restarting)
 
+---
+
+#### How to run this python locally:
+
+1. download the [main.py](https://github.com/shiven0nly/Ai_engineering_repo/blob/main/mini_py_projects/bank_management_sys/main.py)
+2. Open it in your ide
+3. Open console/Terminal 4. Run using:- python main.py
 
 ---
 **Author:** *Shiven Sharma*
