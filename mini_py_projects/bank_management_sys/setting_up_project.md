@@ -88,7 +88,7 @@ Bank Account = {
 - [] Interest Calculation
 - [done] Account Details
 - [done] Logout option
-- [] Maximum 3 login attempts
+- [done] Maximum 3 login attempts
 - [done] Input validation (try-except)
 - [done] Date and time of transactions
 - [] Save data to a file (so balance persists after restarting)

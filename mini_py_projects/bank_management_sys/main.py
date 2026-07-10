@@ -14,41 +14,48 @@ class BankAccount:
     
     # login
     def login(self):
-        
-        try:
-            entered_acc = int(input("Enter account number: "))
-        except ValueError:
-            print("Account number must contain digits only")
-            return False
-        
-        entered_pass = input("Enter your password: ")
-        if entered_acc == self.account_number and entered_pass == self.password:
-            print("=============")
-            print("Login Successful")
-            print("=============")
-            current_time = datetime.now()
-            formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"Login: {formatted_time}")
-            print("===========")
-            print(f"Welcome,{self.name}")
-            print("===========")
-            return True
-        
-        if entered_acc != self.account_number:
-            print("Account number is Invalid!!")
-            return False
-        
-        if entered_pass != self.password:
-            print("Invalid password.")
-            user_choice = input("Forget password? Enter YES or NO: ").strip().lower()
-            if user_choice == "yes":
-                self.forgetPassword()
+        max_attempts = 3
+        for attempt in range(1, max_attempts + 1):
+            try:
+                entered_acc = int(input("Enter account number: "))
+            except ValueError:
+                print("Account number must contain digits only")
+                if attempt == max_attempts:
+                    print("Maximum login attempts reached. Exiting.")
+                    exit()
+                print(f"Attempt left: {max_attempts - attempt}")
+                continue
+
+            entered_pass = input("Enter your password: ")
+            if entered_acc == self.account_number and entered_pass == self.password:
+                print("=============")
+                print("Login Successful")
+                print("=============")
+                current_time = datetime.now()
+                formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+                print(f"Login: {formatted_time}")
+                print("===========")
+                print(f"Welcome,{self.name}")
+                print("===========")
                 return True
+
+            if entered_acc != self.account_number:
+                print("Account number is Invalid!!")
+            elif entered_pass != self.password:
+                print("Invalid password.")
+                user_choice = input("Forget password? Enter YES or NO: ").strip().lower()
+                if user_choice == "yes":
+                    self.forgetPassword()
+                    return True
+                else:
+                    print("Ok, try again!")
             else:
-                print("Ok, try again!")
-                return False
-        
-        print("Invalid Input!!")
+                print("Invalid Input!!")
+
+            if attempt == max_attempts:
+                print("Maximum login attempts reached. Exiting.")
+                exit()
+            print(f"Attempt left: {max_attempts - attempt}")
         return False
     
     # Check Balance
@@ -66,8 +73,7 @@ class BankAccount:
             print("Transaction History")
             for transaction in self.history:
                 print(transaction)
-        
-        
+            
     # Deposit
     def deposit (self):
         try:
@@ -84,8 +90,7 @@ class BankAccount:
             self.history.append(f"Deposited: +{depositAmt} : {formatted_time}")
             
         else:
-            print("Enter valid amount!!")
-            
+            print("Enter valid amount!!")        
     
     # Withdraw:
     def withdraw(self):
@@ -120,8 +125,7 @@ class BankAccount:
                 print("Invalid pin")
                 
         else:
-            print("Invalid Input!!")
-            
+            print("Invalid Input!!")   
     
     # Menu
     def menu(self):
@@ -167,7 +171,7 @@ class BankAccount:
             
             elif(userInp == 7):
                 print("Thank you for using!!")
-                return self.login()
+                return login_func()
             elif(userInp == 8):
                 print("Thank you for using!!")
                 exit()
@@ -342,17 +346,20 @@ accounts = {
 }
 
 print("====== BANK APP ========\n")
-user_choice=int(input("Enter your account number: "))
 
-if user_choice in accounts:
-    curr_user=accounts[user_choice]
+def login_func():
+    user_choice=int(input("Enter your account number: "))
+    if user_choice in accounts:
+        curr_user=accounts[user_choice]
     
-    if curr_user:
-        if curr_user.login():
-            curr_user.menu()
+        if curr_user:
+            if curr_user.login():
+                curr_user.menu()
+            else:
+                print("Failed Login!!")
         else:
             print("Failed Login!!")
     else:
-        print("Failed Login!!")
-else:
-    print("Account not found!!")
+        print("Account not found!!")    
+        
+login_func()
