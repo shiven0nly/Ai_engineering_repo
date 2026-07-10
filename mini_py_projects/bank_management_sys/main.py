@@ -53,11 +53,19 @@ class BankAccount:
     
     # Check Balance
     def check_balance(self):
-        print(f"Current balance:{self.balance}")
-        print("Transaction History")
         
-        for transaction in self.history:
-            print(transaction)
+        try:
+            check_pin =int(input("Enter your PIN: "))
+        except ValueError:
+            print("PIN only contains digits")
+        if(check_pin != self.pin):
+            print("Invalide PIN entered")
+            return False
+        if(check_pin == self.pin):
+            print(f"Current balance:{self.balance}")
+            print("Transaction History")
+            for transaction in self.history:
+                print(transaction)
         
         
     # Deposit
@@ -288,13 +296,20 @@ class BankAccount:
         self.history.append(f"Transferred: -{amount} to {target_account_number} : {formatted_time}")
         target_account.history.append(f"Received: +{amount} from {self.account_number} : {formatted_time}")
 
-        print("Money Transferred Successfully!!")
+        print("Money Transferred successfully!!")
         print(f"Your current balance: {self.balance}")
         return True
 
-    def accountInfo(self):
-        pass
 
+    # Account Information
+    def accountInfo(self):
+        print("\n===Your Account Information===")
+        print(f"""
+        Your name: {self.name},
+        Your Account number: {self.account_number},
+        Your Balance: {self.balance}
+        """)
+        print("\n============\n")
 # Customer:
 
 customer1 = BankAccount(

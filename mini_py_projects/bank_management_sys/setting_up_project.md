@@ -83,10 +83,10 @@ Bank Account = {
 - [done] Transaction History
 - [done] Change Password
 - [done] Change PIN
-- [] Multiple Users (using a dictionary)
-- [] Transfer Money between accounts
+- [done] Multiple Users (using a dictionary)
+- [done] Transfer Money between accounts
 - [] Interest Calculation
-- [] Account Details
+- [done] Account Details
 - [done] Logout option
 - [] Maximum 3 login attempts
 - [done] Input validation (try-except)
