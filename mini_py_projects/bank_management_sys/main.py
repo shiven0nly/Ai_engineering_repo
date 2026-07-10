@@ -29,6 +29,9 @@ class BankAccount:
             print(f"Login: {formatted_time}")
             return True
         
+        if entered_acc != self.account_number:
+            print("Account number is Invalid!!")
+        
         if entered_pass != self.password:
             print("Invalid password.")
             user_choice = input("Forget password? Enter YES or NO: ").strip().lower()
