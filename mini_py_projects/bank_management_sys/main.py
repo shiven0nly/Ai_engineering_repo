@@ -18,9 +18,9 @@ class BankAccount:
             entered_acc = int(input("Enter account number: "))
         except ValueError:
             print("Account number must contain digits only")
-        entered_pass= input("Enter your password: ")
         
-        if (entered_acc == self.account_number and entered_pass == self.password):
+        entered_pass = input("Enter your password: ")
+        if entered_acc == self.account_number and entered_pass == self.password:
             print("=============")
             print("Login Successful")
             print("=============")
@@ -28,14 +28,27 @@ class BankAccount:
             formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"Login: {formatted_time}")
             return True
+        
+        if entered_pass != self.password:
+            print("Invalid password.")
+            user_choice = input("Forget password? Enter YES or NO: ").strip().lower()
+            if user_choice == "yes":
+                self.forgetPassword()
+                return True
+            else:
+                print("Ok, try again!")
+                return False
         else:
-            print("Inavalid Account number or Password")
+            print("Invalid Input!!")
             return False
     
     # Check Balance
     def check_balance(self):
         print(f"Current balance:{self.balance}")
-        print(self.history)
+        print("Transaction History")
+        
+        for transaction in self.history:
+            print(transaction)
         
         
     # Deposit
@@ -97,10 +110,12 @@ class BankAccount:
     def menu(self):
         while(True):
             print("""Welcome, Choose the options:-
-                  1 -> Check Balance
-                  2 -> Deposit Amount
-                  3 -> Withdraw Amount
-                  4 -> Exit""")
+                1 -> Check Balance
+                2 -> Deposit Amount
+                3 -> Withdraw Amount
+                4 -> update password
+                5 -> update pin
+                6 -> Exit""")
             print("====================")
             try:
                 userInp=int(input("Enter your choice: "))
@@ -117,13 +132,90 @@ class BankAccount:
                 
             elif(userInp == 3):
                 self.withdraw()
-            
+                
             elif(userInp == 4):
+                self.updatePassword()
+                
+            elif(userInp == 5):
+                self.updatePin()
+            
+            elif(userInp == 6):
                 print("Thank you for using!!")
                 break
             else:
                 print("Invalid input!!")
             
+    # update Password
+    def updatePassword(self):
+        curr_pass = input("Enter your current password: ")
+        if(curr_pass == self.password):
+            new_pass = input("Enter your new password: ")
+            cnf_pass = input("Confirm your password: ")
+            if(new_pass == cnf_pass):
+                print("Are you sure to change your password: ")
+                user_choice = input("Enter 'YES' or 'NO': ").lower()
+                if(user_choice == "yes"):
+                    self.password = new_pass
+                    print("Password changed successfully!")
+                    return True
+                else:
+                    print("Invalid input!!")
+                    return False
+            else:
+                print("Passwords donot match")
+                return False
+        else:
+            print("Invalid password!")
+            return False
+    
+    # update pin
+    def updatePin(self):
+        try:
+            curr_pin = int(input("Enter your current pin: "))
+        except ValueError:
+            print("PIN only contains digits")
+            return False
+        if(curr_pin == self.pin):
+            try:
+                new_pin = int(input("Enter your new pin: "))
+            except ValueError:
+                print("PIN only contains digits") 
+                return False
+            try:
+                cnf_pin = int(input("Confirm your pin: "))
+            except:
+                print("PIN only contains digits.")
+                return False
+            if(new_pin == cnf_pin):
+                print("Are you sure to change your pin: ")
+                user_choice = input("Enter 'YES' or 'NO': ").lower()
+                if(user_choice == "yes"):
+                    self.pin = new_pin
+                    print("PIN changed successfully!")
+                    return True
+                else:
+                    print("Invalid input!!")
+                    return False
+            else:
+                print("PIN Dont match")
+                return False
+        else:
+            print("Invalid PIN!")
+            return
+        
+    # forget password function
+    def forgetPassword(self):
+        new_pass = input("Enter your new password: ")
+        cnf_pass = input("Confirm your password: ")
+        if(new_pass == cnf_pass):
+            user_choice = input("Are you sure to update your password as new password is no longer valid after this. Input YES or NO: ").lower()
+            if(user_choice=="yes"):
+                self.password = new_pass
+                print("Your password updated successfully")
+                return True
+            else:
+                print("New password not applied")
+                return False
             
 # Customer:
 
