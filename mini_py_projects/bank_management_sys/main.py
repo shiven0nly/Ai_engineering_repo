@@ -249,7 +249,8 @@ class BankAccount(BankSystem):
                 6 -> update pin
                 7 -> Interest Calculation
                 8 -> Logout
-                9 -> Exit""")
+                9 -> Exit
+                10 -> Delete your account""")
             print("====================")
             try:
                 user_inp = int(input("Enter your choice: "))
@@ -280,6 +281,8 @@ class BankAccount(BankSystem):
             elif user_inp == 9:
                 print("Thank you for using!!")
                 raise SystemExit
+            elif user_inp == 10:
+                self.delete_acc()
             else:
                 print("Invalid input!!")
 
@@ -376,7 +379,36 @@ class BankAccount(BankSystem):
         total_amount=amount+interest
         print(f"Total amount=",total_amount)
         
-        
+    def delete_acc(self):
+        global accounts
+        file_path = bank_data_path
+        print("Are you sure you want to delete your account because then its unrecoverable!!")
+        user_acc=input("Enter your account number: ")
+        try:
+            user_pin = int(input("Enter your PIN:"))
+        except ValueError:
+            print("PIN only contains digits")
+            return False
+
+        if user_acc == self.account_number and user_pin == self.pin:
+            try:
+                with open(file_path, "r") as file:
+                    data = json.load(file)
+            except (FileNotFoundError, json.JSONDecodeError):
+                print("File not found or corrupted!")
+                return False
+
+            # Remove the logged-in user
+            if self.account_number in data:
+                del data[self.account_number]
+            else:
+                print("Account not found in data file.")
+                return False
+
+            with open(file_path, "w") as file:
+                json.dump(data, file, indent=4)
+            print("Your Account Deleted Successfully!")
+            raise SystemExit()
 
 
 print("====== BANK APP ========\n")
