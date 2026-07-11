@@ -92,6 +92,7 @@ Bank Account = {
 ---
 
 ### Additional Features we can add:
+- [done] Create new account
 - [done] Transaction History
 - [done] Change Password
 - [done] Change PIN
