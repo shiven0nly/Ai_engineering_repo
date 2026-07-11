@@ -1,9 +1,10 @@
 import json
 import os
 from datetime import datetime
+from random import randint
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-bank_data_path = os.path.join(script_dir, "bank_data.json")
+bank_data_path = os.path.join(script_dir, "bank_data2.json")
 
 # load accounts data from json
 def load_accounts():
@@ -383,9 +384,11 @@ print("====== BANK APP ========\n")
 # Login User Method
 def login_func():
     while True:
+
         user_choice = input("Enter your account number: ").strip()
-        print("User Account Found!")
+        
         if user_choice in accounts:
+            print("User Account Found!")    
             account_data = accounts[user_choice]
             curr_user = BankAccount(
                 name=account_data.get("name", ""),
@@ -403,7 +406,73 @@ def login_func():
         else:
             print("Account not found!!")
 
+# Create User Method
+def create_user(filename="bank_data2.json"):
+    global accounts
+    file_path = bank_data_path
+    name = input("Enter your name: ")
+    acc_choice = input("Do you want to generate account number (Yes or No): ").strip().lower()
+    if acc_choice == "yes":
+        acc_num = randint(5000, 10000)
+        print("Your account number is:", acc_num)
+    else:
+        print("Invalid Input")
+        return False
+    password = input("Enter your password: ")
+    cnf_password = input("Confirm your password: ")
+    if password != cnf_password:
+        print("Passwords do not match.")
+        return False
+    pin = input("Enter your four digit PIN: ")
+    cnf_pin = input("Confirm your PIN: ")
+    if pin != cnf_pin:
+        print("PINs do not match.")
+        return False
+    try:
+        deposit_amt = int(input("Enter the amount you want to deposit (min. 100): "))
+    except ValueError:
+        print("Deposit Amount must contain digits only.")
+        return False
+
+    acc_data = {
+        "name": name,
+        "password": password,
+        "pin": pin,
+        "balance": deposit_amt,
+    }
+
+    accounts[str(acc_num)] = acc_data
+    try:
+        with open(file_path, "r") as file:
+            file_data = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        file_data = {}
+    file_data.update({str(acc_num): acc_data})
+
+    with open(file_path, "w") as file:
+        json.dump(file_data, file, indent=4)
+
+    print("Successfully!! created your account")
+    return login_func()
+
 
 # Main Function
 if __name__ == "__main__":
-    login_func()
+    print("""
+        ---- Hello , Choose your option: ----
+        1 -> Login
+        2 -> Create Account
+        3 -> exit""")
+    try:
+         user_choice = int(input("Choose from below: "))
+    except ValueError:
+        print("Choose from 1 , 2 or 3 only")
+    
+    if (user_choice == 1):
+        login_func()
+    elif(user_choice == 2):
+        create_user()
+    elif(user_choice== 3):
+        raise SystemExit()
+    else:
+        print("Invalid Input")
