@@ -97,13 +97,13 @@ Bank Account = {
 - [done] Change PIN
 - [done] Multiple Users (using a dictionary)
 - [done] Transfer Money between accounts
-- [] Interest Calculation
+- [done] Interest Calculation
 - [done] Account Details
 - [done] Logout option
 - [done] Maximum 3 login attempts
 - [done] Input validation (try-except)
 - [done] Date and time of transactions
-- [] Save data to a file (so balance persists after restarting)
+- [done] Save data to a file (so balance persists after restarting)
 
 ---
 
