@@ -167,5 +167,14 @@
 ```
 ---
 
+### Additional Features:
+** We can add additional features to make this project more feature-rich:**
+- [ ] Rank multiple resumes and show the Top 10 candidates.
+- [ ] Highlight missing skills with suggestions.
+- [ ] Export results to CSV/JSON.
+- [ ] Add a small Streamlit UI for HR to upload resumes.
+- [ ] Visualize scores with a bar chart (Matplotlib).
+- [ ] Support multiple job descriptions.
+
 ### Author
 **SHIVEN SHARMA**
