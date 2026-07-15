@@ -5,13 +5,18 @@ try:
 except ImportError:  # pragma: no cover - allows running the module directly
     from extractor import extract_resume
 
+try:
+    from .matcher import matched_resume
+except ImportError:
+    from matcher import matched_resume
+
 
 
 
 def main():
     # extracting file
     resume_json=extract_resume()
-    print(resume_json)
+    matched_resume(resume_json)
     
 
 

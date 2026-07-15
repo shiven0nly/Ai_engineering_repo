@@ -21,6 +21,7 @@ class Resume(BaseModel):
     name: str
     email: str
     phone: str
+    degree:str
     skills: List[str]
     projects: List[Projects]
     education: List[Education]

@@ -1,22 +1,36 @@
+
+required_skills = ["python", "React", "MERN", "Git", "Linux", "Docker"]
+required_education = {
+    "degrees": ["B.Tech", "Bachelor's of Technology"],
+    "cgpa": 7.5,
+    "percentage_12": 0.6,
+}
+required_experience = {"total_years": 2.0}
+required_projects = ["LLM Wrapper", "E-commerce", "API Handling", "System Design"]
+
 required_resume = {
-    "skills": ["python", "React", "MERN", "Git", "Linux", "Docker"],
-    "education": {
-        "degrees": ["B.Tech", "Bachelor's of Technology"],
-        "cgpa": 7.5,
-        "percentage_12": 0.6,
-    },
-    "experience": {"total_years": 2.0},
-    "projects": ["LLM Wrapper", "E-commerce", "API Handling", "System Design"],
+    "skills": required_skills,
+    "education": required_education,
+    "experience": required_experience,
+    "projects": required_projects,
 }
 
 
+def _get_value(resume, field_name, default=None):
+    if isinstance(resume, dict):
+        return resume.get(field_name, default)
+    return getattr(resume, field_name, default)
+
+
 def match_skills(resume, required_skills):
-    resume_skills = [skill.lower() for skill in getattr(resume, "skills", []) or []]
+    resume_skills = _get_value(resume, "skills", []) or []
+    resume_skills = [str(skill).lower() for skill in resume_skills]
+
     matched = []
     missing = []
 
     for skill in required_skills or []:
-        if skill.lower() in resume_skills:
+        if str(skill).lower() in resume_skills:
             matched.append(skill)
         else:
             missing.append(skill)
@@ -26,7 +40,7 @@ def match_skills(resume, required_skills):
 
 
 def match_education(resume, required_education):
-    education_list = getattr(resume, "education", []) or []
+    education_list = _get_value(resume, "education", []) or []
 
     degrees = required_education.get("degrees", [])
     required_cgpa = required_education.get("cgpa")
@@ -37,11 +51,20 @@ def match_education(resume, required_education):
     percentage_match = False
 
     for entry in education_list:
-        if entry.degree and any(degree.lower() == entry.degree.lower() for degree in degrees):
+        if isinstance(entry, dict):
+            degree = entry.get("degree")
+            cgpa = entry.get("cgpa")
+            percentage = entry.get("percentage_12")
+        else:
+            degree = getattr(entry, "degree", None)
+            cgpa = getattr(entry, "cgpa", None)
+            percentage = getattr(entry, "percentage_12", None)
+
+        if degree and any(str(degree_value).lower() == str(degree).lower() for degree_value in degrees):
             degree_match = True
-        if required_cgpa is not None and entry.cgpa is not None and entry.cgpa >= required_cgpa:
+        if required_cgpa is not None and cgpa is not None and cgpa >= required_cgpa:
             cgpa_match = True
-        if required_percentage is not None and entry.percentage_12 is not None and entry.percentage_12 >= required_percentage:
+        if required_percentage is not None and percentage is not None and percentage >= required_percentage:
             percentage_match = True
 
     score = 0
@@ -56,12 +79,17 @@ def match_education(resume, required_education):
 
 
 def match_experience(resume, required_experience):
-    experience_list = getattr(resume, "experience", []) or []
+    experience_list = _get_value(resume, "experience", []) or []
     required_years = required_experience.get("total_years") if isinstance(required_experience, dict) else required_experience
 
     matched = False
     for entry in experience_list:
-        if entry.total_years is not None and required_years is not None and entry.total_years >= required_years:
+        if isinstance(entry, dict):
+            years = entry.get("total_years")
+        else:
+            years = getattr(entry, "total_years", None)
+
+        if years is not None and required_years is not None and years >= required_years:
             matched = True
             break
 
@@ -69,16 +97,39 @@ def match_experience(resume, required_experience):
 
 
 def match_projects(resume, required_projects):
-    resume_projects = [project.title.lower() for project in getattr(resume, "projects", []) or []]
+    resume_projects = _get_value(resume, "projects", []) or []
+    resume_project_titles = []
+
+    for project in resume_projects:
+        if isinstance(project, dict):
+            title = project.get("title")
+        else:
+            title = getattr(project, "title", None)
+        if title is not None:
+            resume_project_titles.append(str(title).lower())
+
     matched = []
     missing = []
 
     for project in required_projects or []:
-        if project.lower() in resume_projects:
+        if str(project).lower() in resume_project_titles:
             matched.append(project)
         else:
             missing.append(project)
 
-    score = round((len(matched) / len            (required_projects)) * 100, 2) if required_projects else 100.0
-
+    score = round((len(matched) / len(required_projects)) * 100, 2) if required_projects else 100.0
     return {"matched": matched, "missing": missing, "score": score, "matches": score >= 50}
+
+
+def matched_resume(resume):
+    skills = match_skills(resume, required_skills)
+    projects = match_projects(resume, required_projects)
+    experience = match_experience(resume, required_experience)
+    education = match_education(resume, required_education)
+
+    print(skills)
+    print(projects)
+    print(experience)
+    print(education)
+    return {"skills": skills, "projects": projects, "experience": experience, "education": education}
+    
