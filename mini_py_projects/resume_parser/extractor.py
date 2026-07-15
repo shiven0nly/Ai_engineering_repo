@@ -59,8 +59,9 @@ def _extract_json_payload(text: str):
         raise ValueError("Gemini response was not valid JSON")
 
 
-def extract_resume():
-    file_path = choose_file()
+def extract_resume(file_path=None):
+    if file_path is None:
+        file_path = choose_file()
 
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
