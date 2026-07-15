@@ -1,4 +1,23 @@
 
+import json
+import os
+import re
+import time
+
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv():
+        return False
+
+try:
+    from google import genai
+    from google.genai import types
+except ImportError:
+    genai = None
+    types = None
+
+
 required_skills = ["python", "React", "MERN", "Git", "Linux", "Docker"]
 required_education = {
     "degrees": ["B.Tech", "Bachelor's of Technology"],
@@ -22,114 +41,136 @@ def _get_value(resume, field_name, default=None):
     return getattr(resume, field_name, default)
 
 
-def match_skills(resume, required_skills):
-    resume_skills = _get_value(resume, "skills", []) or []
-    resume_skills = [str(skill).lower() for skill in resume_skills]
+def _extract_json_payload(text: str):
+    text = text.strip()
+    text = re.sub(r"```(?:json)?\s*", "", text)
+    text = re.sub(r"\s*```", "", text)
 
-    matched = []
-    missing = []
-
-    for skill in required_skills or []:
-        if str(skill).lower() in resume_skills:
-            matched.append(skill)
-        else:
-            missing.append(skill)
-
-    score = round((len(matched) / len(required_skills)) * 100, 2) if required_skills else 100.0
-    return {"matched": matched, "missing": missing, "score": score, "matches": score >= 50}
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            return json.loads(match.group(0))
+        raise ValueError("Gemini response was not valid JSON")
 
 
-def match_education(resume, required_education):
-    education_list = _get_value(resume, "education", []) or []
+def personal_info(resume):
+    if isinstance(resume, dict):
+        return {
+            "name": resume.get("name"),
+            "email": resume.get("email"),
+            "phone": resume.get("phone"),
+        }
 
-    degrees = required_education.get("degrees", [])
-    required_cgpa = required_education.get("cgpa")
-    required_percentage = required_education.get("percentage_12")
-
-    degree_match = False
-    cgpa_match = False
-    percentage_match = False
-
-    for entry in education_list:
-        if isinstance(entry, dict):
-            degree = entry.get("degree")
-            cgpa = entry.get("cgpa")
-            percentage = entry.get("percentage_12")
-        else:
-            degree = getattr(entry, "degree", None)
-            cgpa = getattr(entry, "cgpa", None)
-            percentage = getattr(entry, "percentage_12", None)
-
-        if degree and any(str(degree_value).lower() == str(degree).lower() for degree_value in degrees):
-            degree_match = True
-        if required_cgpa is not None and cgpa is not None and cgpa >= required_cgpa:
-            cgpa_match = True
-        if required_percentage is not None and percentage is not None and percentage >= required_percentage:
-            percentage_match = True
-
-    score = 0
-    if degree_match:
-        score += 50
-    if cgpa_match:
-        score += 25
-    if percentage_match:
-        score += 25
-
-    return {"matches": score >= 50, "score": score, "degree_matched": degree_match}
+    return {
+        "name": getattr(resume, "name", None),
+        "email": getattr(resume, "email", None),
+        "phone": getattr(resume, "phone", None),
+    }
 
 
-def match_experience(resume, required_experience):
-    experience_list = _get_value(resume, "experience", []) or []
-    required_years = required_experience.get("total_years") if isinstance(required_experience, dict) else required_experience
+def _call_gemini(prompt: str):
+    load_dotenv()
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is not available")
 
-    matched = False
-    for entry in experience_list:
-        if isinstance(entry, dict):
-            years = entry.get("total_years")
-        else:
-            years = getattr(entry, "total_years", None)
+    if genai is None or types is None:
+        raise ImportError("google-genai is not installed. Run: pip install google-genai")
 
-        if years is not None and required_years is not None and years >= required_years:
-            matched = True
-            break
+    client = genai.Client(api_key=api_key)
+    models_to_try = ["gemini-3.5-flash", "gemini-3.0-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash"]
 
-    return {"matches": matched, "score": 100.0 if matched else 0.0}
+    last_error = None
+    for model_name in models_to_try:
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                    response_mime_type="application/json",
+                ),
+            )
+            response_text = getattr(response, "text", "") or ""
+            if response_text:
+                return _extract_json_payload(response_text)
+            raise ValueError("Gemini returned an empty response")
+        except Exception as exc:
+            last_error = exc
+            time.sleep(1)
 
-
-def match_projects(resume, required_projects):
-    resume_projects = _get_value(resume, "projects", []) or []
-    resume_project_titles = []
-
-    for project in resume_projects:
-        if isinstance(project, dict):
-            title = project.get("title")
-        else:
-            title = getattr(project, "title", None)
-        if title is not None:
-            resume_project_titles.append(str(title).lower())
-
-    matched = []
-    missing = []
-
-    for project in required_projects or []:
-        if str(project).lower() in resume_project_titles:
-            matched.append(project)
-        else:
-            missing.append(project)
-
-    score = round((len(matched) / len(required_projects)) * 100, 2) if required_projects else 100.0
-    return {"matched": matched, "missing": missing, "score": score, "matches": score >= 50}
+    raise RuntimeError(f"Gemini request failed after retries: {last_error}")
 
 
-def matched_resume(resume):
-    skills = match_skills(resume, required_skills)
-    projects = match_projects(resume, required_projects)
-    experience = match_experience(resume, required_experience)
-    education = match_education(resume, required_education)
+def match_resume_with_gemini(resume, requirements_text: str):
+    info = personal_info(resume)
 
-    print(skills)
-    print(projects)
-    print(experience)
-    print(education)
-    return {"skills": skills, "projects": projects, "experience": experience, "education": education}
+    resume_text = ""
+    if isinstance(resume, dict):
+        resume_text = json.dumps(resume, indent=2)
+    else:
+        resume_text = json.dumps(
+            {
+                "name": getattr(resume, "name", None),
+                "email": getattr(resume, "email", None),
+                "phone": getattr(resume, "phone", None),
+                "job_title": getattr(resume, "job_title", None),
+                "degree": getattr(resume, "degree", None),
+                "skills": getattr(resume, "skills", None),
+                "projects": getattr(resume, "projects", None),
+                "education": getattr(resume, "education", None),
+                "experience": getattr(resume, "experience", None),
+                "summary": getattr(resume, "summary", None),
+            },
+            indent=2,
+            default=str,
+        )
+
+    prompt = f"""
+    You are an expert recruiter and technical evaluator.
+
+    Evaluate this candidate resume against the job requirements below.
+    Be thoughtful and semantic, not just keyword-based. If a project or skill is indirectly related, give credit.
+
+    Requirements text:
+    {requirements_text}
+
+    Candidate resume:
+    {resume_text}
+
+    Return JSON with this exact structure:
+    {{
+      "score": 0-100,
+      "summary": "short evaluation summary",
+      "strengths": ["..."],
+      "weaknesses": ["..."],
+      "missing_fields": ["..."],
+      "feedback": "detailed feedback"
+    }}
+    """
+
+    result = _call_gemini(prompt)
+    return {
+        "personal_info": info,
+        "score": result.get("score", 0),
+        "summary": result.get("summary", ""),
+        "strengths": result.get("strengths", []),
+        "weaknesses": result.get("weaknesses", []),
+        "missing_fields": result.get("missing_fields", []),
+        "feedback": result.get("feedback", ""),
+    }
+
+
+def matched_resume(resume, requirements_text=None):
+    if requirements_text is None:
+        requirements_text = "".join(
+            [
+                "Evaluate the candidate for a software engineering role. Prefer candidates with strong Python, React, MERN, Git, Docker, system design, API development, and B.Tech or equivalent education.",
+                "Experience of at least 2 years is preferred.",
+            ]
+        )
+
+    return match_resume_with_gemini(resume, requirements_text)
     
