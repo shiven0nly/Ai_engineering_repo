@@ -16,8 +16,6 @@ class Projects(BaseModel):
     title: str
     technologies_used: List[str] | None = None
     
-    
-    
 class Resume(BaseModel):
     job_title: str | None = None
     name: str
@@ -30,4 +28,4 @@ class Resume(BaseModel):
     certifications: List[str]
     languages: List[str] | None = None
     summary: str
-    
+
