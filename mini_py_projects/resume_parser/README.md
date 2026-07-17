@@ -33,3 +33,7 @@ Resume pdf -> Paser -> LLM + Pydantic -> Structured Resume JSON -> Matcher -> Ca
 - Candidate Matching
 - AI Feedback
 - ATS Score
+---
+
+**You can learn more about the project by going to the below link:-**
+[setting_up_project.md](https://github.com/shiven0nly/Ai_engineering_repo/blob/main/mini_py_projects/resume_parser/setting_up_project.md)
