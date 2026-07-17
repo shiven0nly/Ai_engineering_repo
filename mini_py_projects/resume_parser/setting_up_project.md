@@ -188,7 +188,7 @@ deactivate
 ---
 
 ### Additional Features:
-** We can add additional features to make this project more feature-rich:**
+**We can add additional features to make this project more feature-rich:**
 - [ ] Rank multiple resumes and show the Top 10 candidates.
 - [ ] Highlight missing skills with suggestions.
 - [ ] Export results to CSV/JSON.
