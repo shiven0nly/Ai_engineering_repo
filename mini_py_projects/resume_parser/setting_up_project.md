@@ -166,6 +166,25 @@
 }
 ```
 ---
+### How to Run this locally
+```
+git clone https://github.com/shiven0nly/Ai_engineering_repo.git
+
+code Ai_engineering_repo
+
+cd mini_py_projects
+
+cd resume_parser
+
+.\.venv\Scripts\activate.ps1
+
+streamlit run main.py
+
+# to deactivate the server
+
+deactivate
+
+---
 
 ### Additional Features:
 ** We can add additional features to make this project more feature-rich:**
