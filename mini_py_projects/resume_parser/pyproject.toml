@@ -2,7 +2,7 @@
 name = "resume-parser"
 version = "0.1.0"
 description = "Its a resume-parser project using LLM, Pydantic for structured json output, and semantic key matchings from candidate resume and HR Requirements."
-readme = "setting_up_project.md"
+readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "dotenv-python>=0.0.1",

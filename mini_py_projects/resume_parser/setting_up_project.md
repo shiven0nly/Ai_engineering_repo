@@ -183,6 +183,7 @@ streamlit run main.py
 # to deactivate the server
 
 deactivate
+```
 
 ---
 
