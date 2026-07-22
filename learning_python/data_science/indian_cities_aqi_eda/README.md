@@ -120,18 +120,33 @@ The notebook contains:
 
 ---
 
-### Images:
-images/
-│
-├── ![aqi_distribution.png](./images/1_aqi-distribution.png)
-├── ![aqi_category_distribution.png](./images/2_aqi-category_distribution.png)
-├── ![monthly_aqi_trend.png](./images/3_monthly_aqi_trend.png)
-├── ![top_10_polluted_cities.png](./images/4_top_10_polluted_cities.png)
-├── ![city_aqi_boxplot.png](./images/5_city_aqi_boxplot.png)
-├── ![pollutant_distribution.png](./images/6_pollutant_distribution.png)
-├── ![pm25_vs_aqi.png](./images/7_pm25_vs_aqi.png)
-├── ![pm10_vs_aqi.png](./images/8_pm10_vs_aqi.png)
-├── ![correlation_heatmap.png](./images/9_correlation_heatmapt.png)
+### Images: 
+1. aqi_distribution.png
+![aqi_distribution.png](./images/1_aqi-distribution.png)
+
+2. aqi_category_distribution.png
+![aqi_category_distribution.png](./images/2_aqi-category_distribution.png)
+
+3. monthly_aqi_trend.png
+![monthly_aqi_trend.png](./images/3_monthly_aqi_trend.png)
+
+4. top_10_polluted_cities.png
+![top_10_polluted_cities.png](./images/4_top_10_polluted_cities.png)
+
+5. city_aqi_boxplot.png
+![city_aqi_boxplot.png](./images/5_city_aqi_boxplot.png)
+
+6. pollutant_distribution.png
+![pollutant_distribution.png](./images/6_pollutant_distribution.png)
+
+7. pm25_vs_aqi.png
+![pm25_vs_aqi.png](./images/7_pm25_vs_aqi.png)
+
+8. pm10_vs_aqi.png
+![pm10_vs_aqi.png](./images/8_pm10_vs_aqi.png)
+
+9. correlation_heatmap.png
+![correlation_heatmap.png](./images/9_correlation_heatmapt.png)
 
 ---
 
