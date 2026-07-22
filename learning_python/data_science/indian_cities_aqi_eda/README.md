@@ -104,6 +104,8 @@ The project answers questions such as:
 - Correlation heatmap
 - Relationship between AQI and pollutants
 
+(*A detailed summary of the analysis and key findings is available in **[insights.md](./insights.md)**.*)
+
 ---
 
 #### Visualizations:
