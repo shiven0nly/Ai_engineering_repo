@@ -4,42 +4,43 @@
 import os
 import sys
 from pathlib import Path
-from dotenv import load_dotenv
+
 from groq import Groq
 
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
 
 try:
-    from prompt_builder import PROMPT
-except ImportError:
-    from prompt_builder import PROMPT
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover
+    def load_dotenv() -> bool:
+        return False
 
+from app.services.prompt_builder import PROMPT
 
 load_dotenv()
-my_api_key=os.getenv("GROQ_API_KEY")
+my_api_key = os.getenv("GROQ_API_KEY")
 
-if not my_api_key:
-    raise ValueError("API Key not available")
+client = Groq(api_key=my_api_key) if my_api_key else None
 
-client = Groq(api_key=my_api_key)
+model = "openai/gpt-oss-120b"
 
-model="openai/gpt-oss-120b"
-user_prompt="""
-Tell me about the user?
-"""
 
-msg_user={
-    "role":"user",
-    "content":user_prompt,
-}
-msg_sys={
-        "role":"system",
-        "content":PROMPT
-}
-def call_llm():
-    messages=[msg_user,msg_sys]
-    response=client.chat.completions.create(model=model, messages=messages,temperature=0)
-    answer=response.choices[0].message.content 
-    return answer
+def generate_response(user_message: str) -> str:
+    if not client:
+        return "GROQ API key is not configured. Please set GROQ_API_KEY in the backend .env file."
 
-if __name__ == "__main__":
-    call_llm()
+    try:
+        messages = [
+            {"role": "user", "content": user_message},
+            {"role": "system", "content": PROMPT},
+        ]
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=0,
+        )
+        return response.choices[0].message.content or "No response generated."
+    except Exception as exc:
+        return f"Unable to generate response: {exc}"
