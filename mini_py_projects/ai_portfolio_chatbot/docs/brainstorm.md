@@ -87,3 +87,5 @@ We need structed candidate data for it.
 #### Architecture Design:
 **FLow:** React Frontend -> FastAPI Backend -> Prompt Builder -> Candidate Data ->Groq LLM API -> Conversation Memory (assistant)
 
+#### Coding workflow:
+**Flow:** Candidate JSON -> Candidate Loader -> Prompt Builder -> LLM Service -> CLI Prototype -> FastAPI -> Streaming -> React -> Memory -> JD Matching
