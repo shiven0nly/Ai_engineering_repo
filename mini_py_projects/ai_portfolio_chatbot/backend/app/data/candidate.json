@@ -1,0 +1,178 @@
+{
+  "personal_information": {
+    "full_name": "Shivam Sharma",
+    "location": "Surat, Gujarat, India",
+    "email": "shivens006@gmail.com",
+    "phone": "+91-9460272387",
+    "summary": "Results-driven B.Tech Electronics and Communication Engineering student at Sardar Vallabhbhai National Institute of Technology (SVNIT), Surat with strong experience in full-stack web development, cloud deployment, AI-powered applications, and open-source contribution. Built and deployed scalable MERN applications using Docker, Azure Cloud, GitHub Actions, MongoDB, Next.js, and React.js. Selected for national-level hackathons including AI for Bharat and Google TechSprint Top 10 Finalists."
+  },
+  "social_links": {
+    "linkedin": "https://linkedin.com/in/shiven-sharma-2b0819358",
+    "portfolio": "https://shivensharma.qzz.io/",
+    "github": "https://github.com/shiven0nly"
+  },
+  "education": [
+    {
+      "institution": "Sardar Vallabhbhai National Institute of Technology, Surat",
+      "degree": "B.Tech in Electronics and Communication Engineering",
+      "duration": "2025-2029",
+      "cgpa": "9.45/10(1st year)"
+    }
+  ],
+  "skills": {
+    "technical_skills": {
+      "languages": [
+        "C++",
+        "JavaScript",
+        "HTML5",
+        "CSS3"
+      ],
+      "frontend": [
+        "React.js",
+        "Next.js",
+        "TailwindCSS",
+        "GSAP",
+        "ShadCN/UI"
+      ],
+      "backend": [
+        "Node.js",
+        "Express.js",
+        "REST APIs"
+      ],
+      "databases": [
+        "MongoDB",
+        "Firebase",
+        "Supabase"
+      ],
+      "cloud_and_devops": [
+        "Docker",
+        "Azure VM",
+        "GitHub Actions",
+        "CI/CD",
+        "Nginx",
+        "PM2"
+      ],
+      "ai_ml": [
+        "RAG",
+        "Amazon Bedrock",
+        "Claude 3.5 Sonnet",
+        "Titan Embeddings",
+        "Gemini API"
+      ],
+      "tools": [
+        "Git",
+        "GitHub",
+        "Linux",
+        "Mongo Express",
+        "Jupyter Notebook"
+      ]
+    },
+    "soft_skills": [
+      "Problem Solving",
+      "Technical Leadership",
+      "Communication",
+      "Collaboration"
+    ]
+  },
+  "experience": [
+    {
+      "role": "Open Source Contributor",
+      "organization": "GirlScript Summer of Code 2026",
+      "location": "Remote",
+      "duration": "May 2026 - Present",
+      "highlights": [
+        "Selected for GSSoC 2026 under Open Source Contribution and AI Agent tracks.",
+        "Contributed to open-source repositories through issue resolution, UI consistency improvements, and collaborative GitHub workflows.",
+        "Worked with Git-based contribution workflows including branching, pull requests, debugging, and CI validation pipelines."
+      ]
+    },
+    {
+      "role": "Founding Chief Technology Officer",
+      "organization": "ShutterSync Live Platform",
+      "location": "Remote",
+      "duration": "Jan 2026 - Present",
+      "highlights": [
+        "Led full-stack development and product roadmap execution for a photography platform MVP launched within 10 days.",
+        "Improved website performance and accessibility, increasing site speed by approximately 30%.",
+        "Mentored a team of 4 developers and coordinated agile workflows, code reviews, and modular architecture design."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "FlowBoard - Full Stack Kanban Application",
+      "year": "2026",
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "MongoDB",
+        "Azure VM",
+        "Docker",
+        "GitHub Actions"
+      ],
+      "highlights": [
+        "Built and deployed a cloud-hosted MERN Kanban application using Azure Ubuntu VM infrastructure and CI/CD workflows.",
+        "Configured GitHub self-hosted runners, PM2 process management, Nginx reverse proxy setup, and custom networking rules.",
+        "Integrated automated deployment pipelines and handled secure environment variable management during production redeployments.",
+        "Strengthened understanding of Linux systems, SSH authentication, VM deployment, and DevOps fundamentals."
+      ]
+    },
+    {
+      "title": "Skill-Sync - AI-Powered Code Intelligence Platform",
+      "year": "2026",
+      "technologies": [
+        "Amazon Bedrock",
+        "RAG",
+        "Vector Embeddings",
+        "Multi-Agent AI"
+      ],
+      "highlights": [
+        "Selected for Round 2 of the national-level AI for Bharat Hackathon. Designed an Agentic AI architecture using Claude 3.5 Sonnet and Titan Embeddings for adaptive code explanation workflows.",
+        "Implemented Retrieval-Augmented Generation (RAG) pipelines with semantic search for large-scale code pattern analysis.",
+        "Focused on reducing developer onboarding complexity through adaptive AI-generated explanations and multilingual support."
+      ]
+    },
+    {
+      "title": "Vivo Health AI-Powered Health Intelligence Platform",
+      "year": "2026",
+      "technologies": [
+        "Gemini API",
+        "Full Stack Development",
+        "AI Integration"
+      ],
+      "highlights": [
+        "Selected among Top 10 nationwide finalists in Google TechSprint Winter Hacks (GDGoC 2025).",
+        "Developed an AI-powered multilingual health platform capable of analyzing uploaded PDF lab reports using Gemini AI.",
+        "Integrated Gmail-based synchronization, contextual AI chatbot workflows, and secure dashboard architecture.",
+        "Built scalable full-stack workflows under hackathon constraints with focus on real-world usability."
+      ]
+    },
+    {
+      "title": "Mini E-Commerce Application",
+      "year": "2026",
+      "technologies": [
+        "React.js",
+        "Express.js",
+        "MongoDB",
+        "TailwindCSS"
+      ],
+      "highlights": [
+        "Developed a MERN-based e-commerce application featuring JWT authentication and CRUD-based cart management.",
+        "Implemented responsive Glassmorphism-inspired UI with optimized frontend-backend integration.",
+        "Created product seeding workflows for rapid environment setup and testing."
+      ]
+    }
+  ],
+  "certifications": [
+    "Microsoft Certified: Azure AI Fundamentals",
+    "Oracle OCI AI Foundations",
+    "AI Agents Fundamentals Hugging Face",
+    "Digital Marketing Certified HubSpot Academy"
+  ],
+  "achievements": [
+    "Selected for Round 2 of the national-level AI for Bharat hackathon.",
+    "Top 10 Finalist Google TechSprint Winter Hacks 2025.",
+    "Selected Contributor GirlScript Summer of Code (GSSOC) 2026.",
+    "Successfully deployed full-stack applications using Azure VM infrastructure and CI/CD workflows."
+  ]
+}
