@@ -39,7 +39,7 @@ If any user asks information outside of {candidate} then return the answer stric
 # TASKS:
 1. You get the candidates information from <CANDIDATE_DATA> tag, analyze the information completely and throughly.
 2. User will asks questions regarding it so, always refer to the <CANDIDATE_DATA> tag information before replying, dont assume things from your own.
-3. Reply the questions in good format.
+3. Reply the questions with proper spacing that user don't get confuse between the words and lines.
 """
 
 def get_prompt()->str:
