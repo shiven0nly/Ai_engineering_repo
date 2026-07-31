@@ -11,14 +11,16 @@ if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
 from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
 
 from app.models.chat import ChatRequest, ChatResponse
 from app.services.llm_service import generate_response
 
 router = APIRouter()
 
-@router.post("/chat",response_model=ChatResponse)
+@router.post("/chat")
 def chat(req: ChatRequest):
-    answer=generate_response(req.message)
-    
-    return ChatResponse(response=answer)
+    return StreamingResponse(
+        generate_response(req.message),
+        media_type="text/event-stream"
+    )

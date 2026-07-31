@@ -27,7 +27,7 @@ client = Groq(api_key=my_api_key) if my_api_key else None
 model = "openai/gpt-oss-120b"
 
 
-def generate_response(user_message: str) -> str:
+def generate_response(user_message: str):
     if not client:
         return "GROQ API key is not configured. Please set GROQ_API_KEY in the backend .env file."
 
@@ -40,7 +40,13 @@ def generate_response(user_message: str) -> str:
             model=model,
             messages=messages,
             temperature=0,
+            stream=True
         )
-        return response.choices[0].message.content or "No response generated."
+# 2. Yield text tokens incrementally
+        for chunk in response:
+            content = chunk.choices[0].delta.content or ""
+            if content:
+                yield content
+
     except Exception as exc:
-        return f"Unable to generate response: {exc}"
+        yield f"Unable to generate response: {exc}"
