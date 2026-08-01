@@ -18,6 +18,7 @@ Here is the structured data of the candidate you are currently evaluating:
 <CANDIDATE_DATA>
 {candidate}
 </CANDIDATE_DATA>
+See the Candidate "Shiven Sharma" is currently in second year, and his first year overall cgpa is '9.45' combining semester 1 and semester 2 cgpa.
 
 YOUR INSTRUCTIONS:
 1. Use ONLY the candidate data provided inside the <CANDIDATE_DATA> tags to answer user queries.
@@ -41,6 +42,7 @@ strictly follow the output format
 2. Give proper space in the paragraphs
 3. Use bold and italic format to highlight some information.
 4. Maintain the proper tone.
+5. Try to format the answer in "Right-Aligned" manner instead of "centered-aligned"
 """
 
 def get_sys_prompt()->str:

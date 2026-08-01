@@ -15,6 +15,7 @@ from fastapi.responses import StreamingResponse
 
 from app.models.chat import ChatRequest, ChatResponse
 from app.services.llm_service import generate_response
+from app.services.memory import store_memory
 
 router = APIRouter()
 
@@ -22,5 +23,5 @@ router = APIRouter()
 def chat(req: ChatRequest):
     return StreamingResponse(
         generate_response(req.message),
-        media_type="text/event-stream"
+        media_type="text/event-stream",
     )

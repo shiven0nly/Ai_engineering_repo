@@ -7,7 +7,7 @@ export default function App() {
     {
       id: 1,
       sender: 'bot',
-      text: "Hello! I'm your AI representative of Shiven Sharma. Ask me anything about Shiven's skills, experience, or projects!",
+      text: "Hello! I'm AI representative of Shiven Sharma. Ask me anything about Shiven's skills, experience, or projects!",
     },
   ]);
   const [input, setInput] = useState('');
@@ -91,11 +91,8 @@ export default function App() {
             </div>
             <div>
               <h3>Candidate Insights</h3>
-              <p className="subtitle">Powered by Groq & Gemini Prompt Architecture</p>
+              <p className="subtitle">Powered by Groq</p>
             </div>
-          </div>
-          <div className="status-pill">
-            <span className="online-dot"></span> Live
           </div>
         </header>
 
