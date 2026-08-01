@@ -64,6 +64,11 @@ class Candidate(BaseModel):
     projects: List[Projects]
     certifications: List[str]
     achievements: List[str]
+    hobbies: Optional[str] = None
+    strengths: Optional[str] = None
+    weakness: Optional[str] = None
+    opportunities: Optional[str] = None
+    threats: Optional[str] = None
     
 # Loading and validating the JSON
 
