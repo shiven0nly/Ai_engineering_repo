@@ -330,3 +330,29 @@ body, html {
   color: #525252;
   cursor: not-allowed;
 }
+
+/*For File attaching*/
+.attach-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1e1e1e;
+  color: #a3a3a3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.attach-btn:hover:not(:disabled) {
+  background: #262626;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.attach-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

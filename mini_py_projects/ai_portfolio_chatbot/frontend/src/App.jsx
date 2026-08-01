@@ -7,13 +7,14 @@ export default function App() {
     {
       id: 1,
       sender: 'bot',
-      text: "Hello! I'm AI representative of Shiven Sharma. Ask me anything about Shiven's skills, experience, or projects!",
+      text: "Hello! Ask me anything about Shiven's resume, or **upload a Job Description (PDF/DOCX)** using the attachment button below to run an instant match score analysis!",
     },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -23,6 +24,7 @@ export default function App() {
     scrollToBottom();
   }, [messages, isLoading]);
 
+  // Handle standard message streaming
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -40,14 +42,46 @@ export default function App() {
       { id: botMsgId, sender: 'bot', text: '' },
     ]);
 
+    await streamResponse('http://127.0.0.1:8000/chat', JSON.stringify({ message: userQuery }), 'application/json', botMsgId);
+  };
+
+  // Handle file upload & JD matching
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || isLoading) return;
+
+    setIsLoading(true);
+    const userMsgId = Date.now();
+    const botMsgId = Date.now() + 1;
+
+    setMessages((prev) => [
+      ...prev,
+      { id: userMsgId, sender: 'user', text: `📁 Uploaded Job Description: **${file.name}**` },
+      { id: botMsgId, sender: 'bot', text: '' },
+    ]);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Reset file input value so same file can be uploaded again if needed
+    e.target.value = '';
+
+    await streamResponse('http://127.0.0.1:8000/chat/match-jd', formData, null, botMsgId);
+  };
+
+  // Shared streaming response consumer
+  const streamResponse = async (url, body, contentType, botMsgId) => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/chat', {
+      const headers = {};
+      if (contentType) headers['Content-Type'] = contentType;
+
+      const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userQuery }),
+        headers: headers,
+        body: body,
       });
 
-      if (!response.body) throw new Error('No stream response body.');
+      if (!response.body) throw new Error('No response body');
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder('utf-8');
@@ -65,11 +99,11 @@ export default function App() {
         );
       }
     } catch (error) {
-      console.error('Streaming error:', error);
+      console.error('Error during streaming:', error);
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === botMsgId
-            ? { ...msg, text: '⚠️ Unable to reach server. Please try again.' }
+            ? { ...msg, text: '⚠️ Unable to complete request. Please try again.' }
             : msg
         )
       );
@@ -90,9 +124,12 @@ export default function App() {
               </svg>
             </div>
             <div>
-              <h3>Candidate Insights</h3>
-              <p className="subtitle">Powered by Groq</p>
+              <h3>Candidate Insights & Matcher</h3>
+              <p className="subtitle">Resume Chatbot & JD Fit Analyzer</p>
             </div>
+          </div>
+          <div className="status-pill">
+            <span className="online-dot"></span> Live
           </div>
         </header>
 
@@ -103,11 +140,7 @@ export default function App() {
               key={msg.id}
               className={`message-row ${msg.sender === 'user' ? 'user-row' : 'bot-row'}`}
             >
-              {msg.sender === 'bot' && (
-                <div className="avatar bot-avatar">
-                  🤖
-                </div>
-              )}
+              {msg.sender === 'bot' && <div className="avatar bot-avatar">🤖</div>}
 
               <div className={`glass-bubble ${msg.sender === 'user' ? 'user-bubble' : 'bot-bubble'}`}>
                 {msg.text === '' && isLoading && msg.sender === 'bot' ? (
@@ -116,34 +149,51 @@ export default function App() {
                     <span></span>
                     <span></span>
                   </div>
-                ) : msg.sender === 'bot' ? (
+                ) : (
                   <div className="markdown-content">
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
                   </div>
-                ) : (
-                  <p>{msg.text}</p>
                 )}
               </div>
 
-              {msg.sender === 'user' && (
-                <div className="avatar user-avatar">
-                  👤
-                </div>
-              )}
+              {msg.sender === 'user' && <div className="avatar user-avatar">👤</div>}
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Bar */}
+        {/* Input Bar with Attachment */}
         <form onSubmit={handleSend} className="glass-input-wrapper">
+          {/* Hidden File Input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            accept=".pdf,.docx"
+            style={{ display: 'none' }}
+          />
+
+          {/* Paperclip Button */}
+          <button
+            type="button"
+            className="attach-btn"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isLoading}
+            title="Upload JD (.pdf or .docx)"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+            </svg>
+          </button>
+
           <input
             type="text"
-            placeholder="Ask about candidate experience, tech stack, projects..."
+            placeholder="Ask a question or upload a JD to match..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
           />
+
           <button type="submit" className="send-btn" disabled={isLoading || !input.trim()}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"></line>
