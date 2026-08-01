@@ -94,7 +94,7 @@ export default function App() {
       { id: botMsgId, sender: 'bot', text: '' },
     ]);
 
-    await streamResponse('http://127.0.0.1:8000/chat', JSON.stringify({ message: userQuery }), 'application/json', botMsgId);
+    await streamResponse('https://ai-engineering-repo.vercel.app/chat', JSON.stringify({ message: userQuery }), 'application/json', botMsgId);
   };
 
   const handleFileUpload = async (e) => {
@@ -115,7 +115,7 @@ export default function App() {
     formData.append('file', file);
     e.target.value = '';
 
-    await streamResponse('http://127.0.0.1:8000/chat/match-jd', formData, null, botMsgId);
+    await streamResponse('https://ai-engineering-repo.vercel.app/chat/match-jd', formData, null, botMsgId);
   };
 
   const streamResponse = async (url, body, contentType, botMsgId) => {
