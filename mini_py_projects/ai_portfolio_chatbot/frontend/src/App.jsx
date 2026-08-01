@@ -7,14 +7,61 @@ export default function App() {
     {
       id: 1,
       sender: 'bot',
-      text: "Hello! Ask me anything about Shiven's resume, or **upload a Job Description (PDF/DOCX)** using the attachment button below to run an instant match score analysis!",
+      text: "Hello! Ask me anything about Shiven's resume, upload a Job Description, or click the **mic icon** to speak your question!",
     },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  // Initialize Speech Recognition on component mount
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        setInput(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert('Voice recognition is not supported in this browser. Please use Chrome, Edge, or Safari.');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,10 +71,15 @@ export default function App() {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Handle standard message streaming
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Stop listening if user sends while mic is active
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    }
 
     const userQuery = input.trim();
     setInput('');
@@ -45,7 +97,6 @@ export default function App() {
     await streamResponse('http://127.0.0.1:8000/chat', JSON.stringify({ message: userQuery }), 'application/json', botMsgId);
   };
 
-  // Handle file upload & JD matching
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file || isLoading) return;
@@ -62,14 +113,11 @@ export default function App() {
 
     const formData = new FormData();
     formData.append('file', file);
-
-    // Reset file input value so same file can be uploaded again if needed
     e.target.value = '';
 
     await streamResponse('http://127.0.0.1:8000/chat/match-jd', formData, null, botMsgId);
   };
 
-  // Shared streaming response consumer
   const streamResponse = async (url, body, contentType, botMsgId) => {
     try {
       const headers = {};
@@ -99,7 +147,7 @@ export default function App() {
         );
       }
     } catch (error) {
-      console.error('Error during streaming:', error);
+      console.error('Streaming error:', error);
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === botMsgId
@@ -162,9 +210,8 @@ export default function App() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Bar with Attachment */}
+        {/* Input Bar with Attachment & Mic */}
         <form onSubmit={handleSend} className="glass-input-wrapper">
-          {/* Hidden File Input */}
           <input
             type="file"
             ref={fileInputRef}
@@ -173,7 +220,7 @@ export default function App() {
             style={{ display: 'none' }}
           />
 
-          {/* Paperclip Button */}
+          {/* Attach File Button */}
           <button
             type="button"
             className="attach-btn"
@@ -186,9 +233,25 @@ export default function App() {
             </svg>
           </button>
 
+          {/* Voice to Text Button */}
+          <button
+            type="button"
+            className={`mic-btn ${isListening ? 'listening' : ''}`}
+            onClick={toggleListening}
+            disabled={isLoading}
+            title={isListening ? 'Stop Listening' : 'Voice Input'}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </button>
+
           <input
             type="text"
-            placeholder="Ask a question or upload a JD to match..."
+            placeholder={isListening ? 'Listening to your voice...' : 'Ask a question or upload a JD to match...'}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
