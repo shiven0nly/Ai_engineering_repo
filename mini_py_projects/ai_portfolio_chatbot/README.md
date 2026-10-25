@@ -68,9 +68,13 @@ npm run dev
 # now it will start both backend and frontend servers.
 ```
 
+During local Vite development, the frontend sends requests to
+`http://127.0.0.1:8000` automatically. Production builds use the deployed
+backend URL. To override this, set `VITE_API_BASE_URL` before building.
+
 ### Environment vairiables
 GROQ_API_KEY=your_groq_api_key_here
-CHAT_MODEL=llama-3.3-70b-versatile
+CHAT_MODEL=openai/gpt-oss-120b
 JD_MODEL=openai/gpt-oss-120b
 
 ### Future Improvements:

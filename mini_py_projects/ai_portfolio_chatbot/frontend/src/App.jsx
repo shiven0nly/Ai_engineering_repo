@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import './App.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? 'http://127.0.0.1:8000' : 'https://ai-engineering-repo.vercel.app');
+
 export default function App() {
   const [messages, setMessages] = useState([
     {
@@ -94,7 +97,7 @@ export default function App() {
       { id: botMsgId, sender: 'bot', text: '' },
     ]);
 
-    await streamResponse('https://ai-engineering-repo.vercel.app/chat', JSON.stringify({ message: userQuery }), 'application/json', botMsgId);
+    await streamResponse(`${API_BASE_URL}/chat`, JSON.stringify({ message: userQuery }), 'application/json', botMsgId);
   };
 
   const handleFileUpload = async (e) => {
@@ -115,7 +118,7 @@ export default function App() {
     formData.append('file', file);
     e.target.value = '';
 
-    await streamResponse('https://ai-engineering-repo.vercel.app/chat/match-jd', formData, null, botMsgId);
+    await streamResponse(`${API_BASE_URL}/chat/match-jd`, formData, null, botMsgId);
   };
 
   const streamResponse = async (url, body, contentType, botMsgId) => {

@@ -30,7 +30,7 @@ my_api_key = os.getenv("GROQ_API_KEY")
 
 client = Groq(api_key=my_api_key) if my_api_key else None
 
-model = "llama-3.3-70b-versatile"
+model = os.getenv("CHAT_MODEL", "openai/gpt-oss-120b")
 
 
 def generate_response(user_message: str):
